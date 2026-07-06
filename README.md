@@ -6,7 +6,7 @@ Sistema de agendamento de consultas nas Unidades Básicas de Saúde (UBS) da Reg
 
 O portal permite que os cidadãos agendem consultas online de forma simples e gratuita, consultem e cancelem seus agendamentos, e visualizem endereços e horários das unidades de saúde disponíveis. Conta também com um painel administrativo para gestão das UBS e dos agendamentos realizados.
 
-🔗 **Acesse o sistema em produção:** [link do sistema hospedado]
+🔗 **Acesse o sistema em produção:** [https://portalsaudesm.web.app/]
 
 ## ✨ Funcionalidades
 
