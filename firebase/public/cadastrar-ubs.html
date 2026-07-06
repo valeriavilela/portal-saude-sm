@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Cadastro e edição de Unidades Básicas de Saúde — Painel Administrativo do Sistema de Agendamento UBS GDF.">
+  <meta name="robots" content="noindex, nofollow">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <title id="pageTitle">Cadastrar UBS</title>
+  <link rel="icon" type="image/png" href="img/favicon.png">
+  <link rel="stylesheet" href="js/css/style.css">
+  <style>
+    .dias-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(260px,1fr)); gap:14px; margin-top:12px; }
+    .dia-card { border:1px solid var(--border,#dde3ec); border-radius:8px; overflow:hidden; }
+    .dia-header { background:var(--gdf-blue,#1a3a6b); color:#fff; font-size:13px; font-weight:600; padding:8px 14px; display:flex; align-items:center; justify-content:space-between; }
+    .dia-header label { display:flex; align-items:center; gap:8px; cursor:pointer; margin:0; min-height:36px; }
+    .horarios-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:5px; padding:10px; }
+    .horario-check { display:flex; align-items:center; gap:4px; font-size:11px; cursor:pointer; padding:4px 5px; border-radius:4px; border:1px solid var(--border,#dde3ec); background:#fff; transition:background 0.15s; min-height:36px; }
+    .horario-check:hover { background:#f0f4ff; }
+    .dia-disabled .horarios-grid { opacity:0.3; pointer-events:none; }
+    .espec-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(180px,1fr)); gap:8px; margin-top:10px; }
+    .espec-check { display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer; padding:8px 12px; border-radius:6px; border:1px solid var(--border,#dde3ec); background:#fff; transition:all 0.15s; min-height:44px; }
+    .espec-check:hover { background:#f0f4ff; border-color:#a0bce0; }
+    .espec-check input[type=checkbox]:checked + span { font-weight:600; color:var(--gdf-blue,#1a3a6b); }
+    @media (max-width:600px) {
+      .horarios-grid { grid-template-columns:repeat(3,1fr); }
+      .espec-grid    { grid-template-columns:1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <div class="topbar" role="banner">
+    <span data-i18n="gov_admin">Governo do Distrito Federal — Painel Administrativo</span>
+    <a href="index.html" data-i18n="back_to_portal">Voltar ao Portal</a>
+  </div>
+
+  <header class="header" role="banner">
+    <div class="header-logo">
+      <img src="img/favicon.png"
+           alt="Brasão do Governo do Distrito Federal"
+           width="80" height="80"
+           style="max-height:80px;width:auto;object-fit:contain;">
+    </div>
+    <div class="header-text">
+      <h1 data-i18n="main_title">Sistema de Agendamento de Consultas — UBS</h1>
+      <p data-i18n="subtitle">Secretaria de Saúde do Distrito Federal · Região Administrativa de Santa Maria</p>
+    </div>
+  </header>
+
+  <nav class="nav-bar" role="navigation" aria-label="Menu administrativo">
+    <div class="nav-item" onclick="window.location.href='admin.html'" tabindex="0" role="link" title="Painel Admin">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1L1 7v8h5v-4h4v4h5V7z"/></svg>
+      <span class="nav-label" data-i18n="admin_panel">Painel Admin</span>
+    </div>
+    <div class="nav-item active" onclick="window.location.href='cadastrar-ubs.html'" tabindex="0" role="link" aria-current="page" title="Cadastrar UBS">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zm1 10H7V7h2v4zm0-6H7V3h2v2z"/></svg>
+      <span class="nav-label" data-i18n="register_ubs">Cadastrar UBS</span>
+    </div>
+  </nav>
+
+  <nav class="breadcrumb" aria-label="Localização na página">
+    <span onclick="window.location.href='admin.html'" style="cursor:pointer;"
+          data-i18n="cad_breadcrumb_parent">Painel Admin</span>
+    <span class="sep" aria-hidden="true"> › </span>
+    <span class="current" id="breadcrumbAtual" aria-current="page"
+          data-i18n="cad_breadcrumb">Cadastrar UBS</span>
+  </nav>
+
+  <main class="content" id="main-content" tabindex="-1">
+    <div class="page active">
+      <div class="card" role="region" aria-label="Formulário de cadastro de UBS">
+        <div class="card-header" id="cardTitle" data-i18n="cad_card_title">Cadastrar UBS</div>
+
+        <div class="card-body">
+
+          <!-- ── DADOS DA UBS ── -->
+          <fieldset class="section" style="border:none;padding:0;">
+            <legend class="section-title" data-i18n="cad_section_dados">Dados da UBS</legend>
+            <div class="form-grid">
+
+              <div class="form-group" style="grid-column:1/-1;">
+                <label class="form-label" for="nome">
+                  <span data-i18n="cad_nome_label">Nome da UBS</span>
+                  <span class="req" aria-label="obrigatório">*</span>
+                </label>
+                <input class="form-control" type="text" id="nome"
+                       data-i18n-ph="cad_nome_ph"
+                       placeholder="Ex: UBS 24h de Santa Maria"
+                       autocomplete="organization"
+                       aria-required="true">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="codigo">
+                  <span data-i18n="cad_codigo_label">Código / Sigla</span>
+                  <span class="req" aria-label="obrigatório">*</span>
+                </label>
+                <input class="form-control" type="text" id="codigo"
+                       data-i18n-ph="cad_codigo_ph"
+                       placeholder="Ex: UBS-SM"
+                       aria-required="true">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="tipo">
+                  <span data-i18n="cad_tipo_label">Tipo de Unidade</span>
+                  <span class="req" aria-label="obrigatório">*</span>
+                </label>
+                <select class="form-control" id="tipo" aria-required="true">
+                  <option value="" data-i18n="cad_tipo_select">Selecione</option>
+                  <option>UBS 24h</option>
+                  <option>UBS</option>
+                  <option>Policlínica</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="gestao">
+                  <span data-i18n="cad_gestao_label">Gestão</span>
+                  <span class="req" aria-label="obrigatório">*</span>
+                </label>
+                <select class="form-control" id="gestao" aria-required="true">
+                  <option value="" data-i18n="cad_gestao_select">Selecione</option>
+                  <option data-i18n="cad_gestao_publica">Pública</option>
+                  <option data-i18n="cad_gestao_privada">Privada</option>
+                  <option data-i18n="cad_gestao_filantropica">Filantrópica</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="cnes">
+                  <span data-i18n="cad_cnes_label">CNES</span>
+                  <span class="req" aria-label="obrigatório">*</span>
+                </label>
+                <input class="form-control" type="text" id="cnes"
+                       data-i18n-ph="cad_cnes_ph"
+                       placeholder="Ex: 1234567"
+                       inputmode="numeric"
+                       aria-required="true"
+                       aria-describedby="cnes-help">
+                <span id="cnes-help" style="font-size:11px;color:var(--text-muted);"
+                      data-i18n="cad_cnes_help">
+                  Cadastro Nacional de Estabelecimentos de Saúde (7 dígitos)
+                </span>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="horario">
+                  <span data-i18n="cad_horario_label">Horário de Funcionamento</span>
+                  <span class="req" aria-label="obrigatório">*</span>
+                </label>
+                <select class="form-control" id="horario" aria-required="true">
+                  <option value="" data-i18n="cad_horario_select">Selecione</option>
+                  <option>24 horas</option>
+                  <option>07h às 19h</option>
+                  <option>07h às 17h</option>
+                </select>
+              </div>
+
+            </div>
+          </fieldset>
+
+          <!-- ── ESPECIALIDADES ── -->
+          <fieldset class="section" style="border:none;padding:0;margin-top:24px;">
+            <legend class="section-title">
+              <span data-i18n="cad_section_espec">Especialidades Disponíveis</span>
+              <span class="req" aria-label="obrigatório">*</span>
+            </legend>
+            <p style="font-size:13px;color:var(--text-muted);margin-bottom:8px;"
+               data-i18n="cad_espec_desc">
+              Marque as especialidades oferecidas por esta unidade. Selecione ao menos uma.
+            </p>
+            <div class="espec-grid" id="especGrid"
+                 role="group" aria-label="Lista de especialidades disponíveis"></div>
+          </fieldset>
+
+          <!-- ── HORÁRIOS POR DIA ── -->
+          <fieldset class="section" style="border:none;padding:0;margin-top:24px;">
+            <legend class="section-title">
+              <span data-i18n="cad_section_horarios">Horários de Agendamento por Dia</span>
+              <span class="req" aria-label="obrigatório">*</span>
+            </legend>
+            <p style="font-size:13px;color:var(--text-muted);margin-bottom:8px;"
+               data-i18n="cad_horarios_desc">
+              Ative os dias e marque os horários disponíveis para agendamento. Ao menos um horário deve ser selecionado.
+            </p>
+            <div class="dias-grid" id="diasGrid"
+                 role="group" aria-label="Dias da semana e horários disponíveis"></div>
+          </fieldset>
+
+        </div>
+      </div>
+
+      <div class="notice" role="note">
+        <span aria-hidden="true">ℹ</span>
+        <span data-i18n="cad_required_notice">Campos marcados com * são obrigatórios.</span>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="cancelar()"
+                data-i18n="btn_cancel">Cancelar</button>
+        <button class="btn btn-primary" id="btnSalvar" onclick="salvar()"
+                data-i18n="btn_save">Salvar</button>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="footer" role="contentinfo" tabindex="-1">
+    <strong data-i18n="footer_title">Secretaria de Saúde do Distrito Federal</strong>
+    <span data-i18n="footer_text">· Sistema de Agendamento de Consultas UBS</span><br>
+    <span data-i18n="footer_contact">Central de Atendimento: <strong>156</strong> · Ouvidoria: <strong>0800-644-0156</strong></span><br>
+    <small data-i18n="footer_rights">© 2026 GDF — Todos os direitos reservados</small>
+  </footer>
+
+</div>
+
+<script src="js/translations.js"></script>
+<script src="js/accessibility.js"></script>
+<script type="module" src="js/cadastrar-ubs.js"></script>
+</body>
+</html>

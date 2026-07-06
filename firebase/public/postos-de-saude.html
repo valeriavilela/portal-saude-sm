@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Endereços, horários e informações das Unidades Básicas de Saúde de Santa Maria – Distrito Federal.">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <title>Postos de Saúde</title>
+  <link rel="icon" type="image/png" href="img/favicon.png">
+  <link rel="stylesheet" href="js/css/style.css">
+</head>
+<body>
+<div class="app">
+
+  <div class="topbar" role="banner">
+    <span data-i18n="gov_secao">Governo do Distrito Federal — Secretaria de Saúde</span>
+    <a href="loginadmin.html" data-i18n="admin_login">Login Admin</a>
+  </div>
+
+  <header class="header" role="banner">
+    <div class="header-logo">
+      <img src="img/favicon.png"
+           alt="Brasão do Governo do Distrito Federal"
+           width="80" height="80"
+           style="max-height:80px;width:auto;object-fit:contain;">
+    </div>
+    <div class="header-text">
+      <h1 data-i18n="main_title">Sistema de Agendamento de Consultas — UBS</h1>
+      <p data-i18n="subtitle">Secretaria de Saúde do Distrito Federal · Região Administrativa de Santa Maria</p>
+    </div>
+  </header>
+
+  <nav class="nav-bar" role="navigation" aria-label="Menu principal">
+    <div class="nav-item" onclick="window.location.href='index.html'" tabindex="0" role="link" title="Início">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1L1 7v8h5v-4h4v4h5V7z"/></svg>
+      <span class="nav-label" data-i18n="home">Início</span>
+    </div>
+    <div class="nav-item" onclick="window.location.href='agendar.html'" tabindex="0" role="link" title="Fazer Agendamento">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M4 1v2H2a1 1 0 00-1 1v10a1 1 0 001 1h12a1 1 0 001-1V4a1 1 0 00-1-1h-2V1h-2v2H6V1H4zm-1 4h10v8H3V5zm4 2v2H5v2h2v2h2v-2h2V9h-2V7H7z"/></svg>
+      <span class="nav-label" data-i18n="schedule">Fazer Agendamento</span>
+    </div>
+    <div class="nav-item" onclick="window.location.href='meus-agendamentos.html'" tabindex="0" role="link" title="Meus Agendamentos">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 8a3 3 0 100-6 3 3 0 000 6zm0 2c-3 0-6 1.5-6 3v1h12v-1c0-1.5-3-3-6-3z"/></svg>
+      <span class="nav-label" data-i18n="my_appointments">Meus Agendamentos</span>
+    </div>
+    <div class="nav-item active" onclick="window.location.href='postos-de-saude.html'" tabindex="0" role="link" aria-current="page" title="Postos de Saúde">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1a6 6 0 100 12A6 6 0 008 1zM7 5h2v5H7V5zm0 6h2v2H7v-2z"/></svg>
+      <span class="nav-label" data-i18n="health_centers">Postos de Saúde</span>
+    </div>
+  </nav>
+
+  <nav class="breadcrumb" aria-label="Localização na página">
+    <span onclick="window.location.href='index.html'" data-i18n="home">Início</span>
+    <span aria-hidden="true"> › </span>
+    <span class="current" aria-current="page" data-i18n="postos_breadcrumb">Postos de Saúde</span>
+  </nav>
+
+  <main class="content" id="main-content" tabindex="-1">
+    <div class="page active">
+      <div class="card" role="region" aria-label="Lista de Unidades Básicas de Saúde">
+        <div class="card-header" id="lista-ubs-title" data-i18n="postos_card_title">
+          Unidades Básicas de Saúde — Santa Maria – DF
+        </div>
+        <div id="ubs-info-list" aria-live="polite" aria-labelledby="lista-ubs-title">
+          <div class="card-body" style="text-align:center;padding:32px;color:var(--text-muted);">
+            Carregando unidades...
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer" role="contentinfo" tabindex="-1">
+    <strong data-i18n="footer_title">Secretaria de Saúde do Distrito Federal</strong>
+    <span data-i18n="footer_text">· Sistema de Agendamento de Consultas UBS</span><br>
+    <span data-i18n="footer_contact">Central de Atendimento: <strong>156</strong> · Ouvidoria: <strong>0800-644-0156</strong></span><br>
+    <small data-i18n="footer_rights">© 2026 GDF — Todos os direitos reservados</small>
+  </footer>
+
+</div>
+
+<script src="js/translations.js"></script>
+<script src="js/accessibility.js"></script>
+<script type="module" src="js/postos-de-saude.js"></script>
+</body>
+</html>

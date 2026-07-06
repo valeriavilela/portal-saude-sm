@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Faça seu agendamento online nas Unidades Básicas de Saúde de Santa Maria – DF. Serviço gratuito do Governo do Distrito Federal.">
+  <meta name="author" content="Secretaria de Saúde do Distrito Federal">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <title>Fazer Agendamento</title>
+  <link rel="icon" type="image/png" href="img/favicon.png">
+  <link rel="stylesheet" href="js/css/style.css">
+  <style>
+    .calendario { border:1px solid var(--border,#dde3ec); border-radius:8px; overflow:hidden; max-width:360px; margin-top:8px; }
+    .cal-nav { display:flex; align-items:center; justify-content:space-between; background:var(--gdf-blue,#1a3a6b); color:#fff; padding:10px 14px; font-size:14px; font-weight:600; }
+    .cal-nav button { background:none; border:none; color:#fff; font-size:18px; cursor:pointer; padding:0 6px; line-height:1; min-width:44px; min-height:44px; }
+    .cal-nav button:hover { opacity:0.7; }
+    .cal-weekdays { display:grid; grid-template-columns:repeat(7,1fr); background:#e8eef8; }
+    .cal-weekdays span { text-align:center; font-size:11px; font-weight:600; color:var(--gdf-blue,#1a3a6b); padding:6px 0; }
+    #calDays { display:grid; grid-template-columns:repeat(7,1fr); gap:2px; padding:6px; background:#fff; }
+    .cal-day { text-align:center; padding:7px 4px; font-size:13px; border-radius:5px; cursor:pointer; transition:background 0.15s; min-height:36px; display:flex; align-items:center; justify-content:center; }
+    .cal-day:not(.disabled):not(.empty):hover { background:#d0e4ff; }
+    .cal-day.disabled { color:#aaa; cursor:default; }
+    .cal-day.empty    { cursor:default; }
+    .cal-day.selected { background:var(--gdf-blue,#1a3a6b); color:#fff; font-weight:600; }
+    .data-label { font-size:13px; color:var(--gdf-blue,#1a3a6b); font-weight:600; margin-top:8px; }
+    .sucesso-area { text-align:center; padding:40px 24px; }
+    .sucesso-icone { width:64px; height:64px; background:#27ae60; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 20px; font-size:32px; color:#fff; }
+    .sucesso-titulo { font-size:20px; font-weight:700; color:#1a3a6b; margin-bottom:8px; }
+    .sucesso-sub    { font-size:14px; color:#666; margin-bottom:28px; }
+    .btn-pdf { display:inline-flex; align-items:center; gap:8px; background:#1a3a6b; color:#fff; border:none; border-radius:6px; padding:12px 24px; font-size:14px; font-weight:600; cursor:pointer; margin-bottom:12px; transition:background 0.15s; min-height:44px; }
+    .btn-pdf:hover { background:#14305a; }
+    .btn-novo { display:inline-block; font-size:13px; color:#1a3a6b; cursor:pointer; text-decoration:underline; margin-top:8px; }
+  </style>
+</head>
+<body>
+
+<div class="app">
+
+  <div class="topbar" role="banner">
+    <span data-i18n="gov_secao">Governo do Distrito Federal — Secretaria de Saúde</span>
+    <a href="loginadmin.html" data-i18n="admin_login">Login Admin</a>
+  </div>
+
+  <header class="header" role="banner">
+    <div class="header-logo">
+      <img src="img/favicon.png"
+           alt="Brasão do Governo do Distrito Federal"
+           width="80" height="80"
+           style="max-height:80px;width:auto;object-fit:contain;">
+    </div>
+    <div class="header-text">
+      <h1 data-i18n="main_title">Sistema de Agendamento de Consultas — UBS</h1>
+      <p data-i18n="subtitle">Secretaria de Saúde do Distrito Federal · Região Administrativa de Santa Maria</p>
+    </div>
+  </header>
+
+  <nav class="nav-bar" role="navigation" aria-label="Menu principal">
+    <div class="nav-item" onclick="window.location.href='index.html'" tabindex="0" role="link" title="Início">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1L1 7v8h5v-4h4v4h5V7z"/></svg>
+      <span class="nav-label" data-i18n="home">Início</span>
+    </div>
+    <div class="nav-item active" onclick="window.location.href='agendar.html'" tabindex="0" role="link" aria-current="page" title="Fazer Agendamento">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M4 1v2H2a1 1 0 00-1 1v10a1 1 0 001 1h12a1 1 0 001-1V4a1 1 0 00-1-1h-2V1h-2v2H6V1H4zm-1 4h10v8H3V5zm4 2v2H5v2h2v2h2v-2h2V9h-2V7H7z"/></svg>
+      <span class="nav-label" data-i18n="schedule">Fazer Agendamento</span>
+    </div>
+    <div class="nav-item" onclick="window.location.href='meus-agendamentos.html'" tabindex="0" role="link" title="Meus Agendamentos">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 8a3 3 0 100-6 3 3 0 000 6zm0 2c-3 0-6 1.5-6 3v1h12v-1c0-1.5-3-3-6-3z"/></svg>
+      <span class="nav-label" data-i18n="my_appointments">Meus Agendamentos</span>
+    </div>
+    <div class="nav-item" onclick="window.location.href='postos-de-saude.html'" tabindex="0" role="link" title="Postos de Saúde">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1a6 6 0 100 12A6 6 0 008 1zM7 5h2v5H7V5zm0 6h2v2H7v-2z"/></svg>
+      <span class="nav-label" data-i18n="health_centers">Postos de Saúde</span>
+    </div>
+  </nav>
+
+  <nav class="breadcrumb" aria-label="Localização na página">
+    <span onclick="window.location.href='index.html'" data-i18n="home">Início</span>
+    <span aria-hidden="true"> › </span>
+    <span class="current" aria-current="page" data-i18n="agendar_breadcrumb">Fazer Agendamento</span>
+  </nav>
+
+  <main class="content" id="main-content" tabindex="-1">
+    <div class="container-agendamento">
+      <div class="card" role="region" aria-label="Formulário de Agendamento">
+        <div class="card-header" id="form-title" data-i18n="agendar_card_title">Fazer Agendamento</div>
+        <div class="card-body">
+
+          <div aria-live="polite" aria-atomic="true" id="anuncioAgendamento"
+               style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);">
+          </div>
+
+          <!-- ══ ÁREA DE SUCESSO ══ -->
+          <div id="sucessoArea" style="display:none;" role="alert" aria-live="assertive">
+            <div class="sucesso-area">
+              <div class="sucesso-icone" aria-hidden="true">✓</div>
+              <div class="sucesso-titulo" data-i18n="success_title">Agendamento realizado com sucesso!</div>
+              <div class="sucesso-sub" data-i18n="success_sub">
+                Seu agendamento foi confirmado.<br>
+                Baixe o comprovante abaixo para guardar os detalhes.
+              </div>
+              <div>
+                <button class="btn-pdf" onclick="baixarComprovante()"
+                        aria-label="Baixar comprovante de agendamento em PDF">
+                  <span aria-hidden="true">⬇</span>
+                  <span data-i18n="btn_pdf">Baixar Comprovante em PDF</span>
+                </button>
+              </div>
+              <div>
+                <span class="btn-novo" onclick="novoAgendamento()" role="button" tabindex="0"
+                      aria-label="Fazer outro agendamento"
+                      data-i18n="btn_new_appt">
+                  Fazer outro agendamento
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ══ FORMULÁRIO ══ -->
+          <div id="formularioArea">
+
+            <!-- UBS -->
+            <div class="form-group" role="group" aria-labelledby="label-ubs">
+              <span class="form-label" id="label-ubs">
+                <span data-i18n="select_ubs">Selecione a UBS</span>
+                <span class="req" aria-label="obrigatório">*</span>
+              </span>
+              <div class="ubs-grid" id="ubsCardContainer"
+                   role="radiogroup" aria-labelledby="label-ubs"
+                   aria-required="true">
+                <div style="grid-column:1/-1;padding:24px;text-align:center;color:var(--text-muted);">
+                  Carregando unidades...
+                </div>
+              </div>
+            </div>
+
+            <!-- CALENDÁRIO -->
+            <div class="form-group" id="calendarioWrapper" style="display:none;">
+              <label class="form-label" id="label-data">
+                <span data-i18n="select_date">Selecione a Data</span>
+                <span class="req" aria-label="obrigatório">*</span>
+              </label>
+              <div class="calendario" role="application" aria-label="Calendário para seleção de data">
+                <div class="cal-nav">
+                  <button onclick="changeMonth(-1)" aria-label="Mês anterior" title="Mês anterior">&#8249;</button>
+                  <span id="calMonthLabel" aria-live="polite" aria-atomic="true"></span>
+                  <button onclick="changeMonth(1)" aria-label="Próximo mês" title="Próximo mês">&#8250;</button>
+                </div>
+                <div class="cal-weekdays" role="row" aria-hidden="true">
+                  <span data-i18n="cal_sun">Dom</span>
+                  <span data-i18n="cal_mon">Seg</span>
+                  <span data-i18n="cal_tue">Ter</span>
+                  <span data-i18n="cal_wed">Qua</span>
+                  <span data-i18n="cal_thu">Qui</span>
+                  <span data-i18n="cal_fri">Sex</span>
+                  <span data-i18n="cal_sat">Sáb</span>
+                </div>
+                <div id="calDays" role="grid" aria-label="Dias do mês"></div>
+              </div>
+              <div class="data-label" id="dataSelecionadaLabel" aria-live="polite"></div>
+            </div>
+
+            <!-- HORÁRIO -->
+            <div class="form-group">
+              <label class="form-label" for="hora">
+                <span data-i18n="select_time">Selecione o Horário</span>
+                <span class="req" aria-label="obrigatório">*</span>
+              </label>
+              <select class="form-control" id="hora"
+                      aria-required="true"
+                      aria-describedby="hora-help">
+                <option value="" data-i18n-opt="time_placeholder">Selecione a UBS e a data primeiro</option>
+              </select>
+              <span id="hora-help" style="font-size:12px;color:var(--text-muted);">
+                Os horários são carregados após selecionar a UBS e a data.
+              </span>
+            </div>
+
+            <!-- DADOS PESSOAIS -->
+            <div class="form-group">
+              <label class="form-label" for="nome">
+                <span data-i18n="label_nome">Nome completo</span>
+                <span class="req" aria-label="obrigatório">*</span>
+              </label>
+              <input type="text" class="form-control" id="nome"
+                     data-i18n-ph="nome_placeholder"
+                     placeholder="Seu nome completo"
+                     autocomplete="name"
+                     aria-required="true"
+                     aria-describedby="nome-help">
+              <span id="nome-help" class="field-error" role="alert"></span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="cpf">
+                <span data-i18n="label_cpf">CPF</span>
+                <span class="req" aria-label="obrigatório">*</span>
+              </label>
+              <input type="text" class="form-control" id="cpf"
+                     placeholder="000.000.000-00"
+                     autocomplete="off"
+                     inputmode="numeric"
+                     maxlength="14"
+                     aria-required="true"
+                     aria-describedby="cpf-help"
+                     oninput="maskCPF(this)">
+              <span id="cpf-help" class="field-error" role="alert"></span>
+            </div>
+
+            <!-- ESPECIALIDADE -->
+            <div class="form-group">
+              <label class="form-label" for="especialidade">
+                <span data-i18n="label_especialidade">Especialidade</span>
+                <span class="req" aria-label="obrigatório">*</span>
+              </label>
+              <select class="form-control" id="especialidade"
+                      aria-required="true"
+                      aria-describedby="espec-help">
+                <option value="" data-i18n="select_placeholder">Selecione...</option>
+              </select>
+              <span id="espec-help" class="field-error" role="alert"></span>
+            </div>
+
+            <!-- BOTÃO -->
+            <div style="margin-top:20px;">
+              <button class="btn btn-primary"
+                      onclick="confirmarAgendamento()"
+                      aria-describedby="btn-help"
+                      data-i18n="btn_confirm">
+                Confirmar agendamento
+              </button>
+              <p id="btn-help" style="font-size:12px;color:var(--text-muted);margin-top:6px;"
+                 data-i18n="required_fields">
+                Todos os campos obrigatórios (*) devem ser preenchidos.
+              </p>
+            </div>
+
+          </div><!-- /formularioArea -->
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer" role="contentinfo" tabindex="-1">
+    <strong data-i18n="footer_title">Secretaria de Saúde do Distrito Federal</strong>
+    <span data-i18n="footer_text">· Sistema de Agendamento de Consultas UBS</span><br>
+    <span data-i18n="footer_contact">Central de Atendimento: <strong>156</strong> · Ouvidoria: <strong>0800-644-0156</strong></span><br>
+    <small data-i18n="footer_rights">© 2026 GDF — Todos os direitos reservados</small>
+  </footer>
+
+</div>
+
+<script src="js/translations.js"></script>
+<script src="js/accessibility.js"></script>
+<script type="module" src="js/agendar.js"></script>
+</body>
+</html>

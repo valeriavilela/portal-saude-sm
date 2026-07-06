@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Área de acesso administrativo ao Sistema de Agendamento de Consultas UBS — GDF. Restrito a administradores autorizados.">
+  <meta name="robots" content="noindex, nofollow">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <title>Login Administrativo</title>
+  <link rel="icon" type="image/png" href="img/favicon.png">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="js/css/style.css">
+</head>
+<body style="background-image:url('img/workspace.png');background-size:cover;background-attachment:fixed;background-position:center;">
+
+<div class="app" style="position:relative;">
+
+  <div class="topbar" role="banner">
+    <span data-i18n="gov_secao">Governo do Distrito Federal — Secretaria de Saúde</span>
+    <a href="index.html" data-i18n="back_to_portal">Voltar ao Portal</a>
+  </div>
+
+  <header class="header" role="banner">
+    <div class="header-text">
+      <h1 data-i18n="main_title">Sistema de Agendamento de Consultas — UBS</h1>
+      <p data-i18n="subtitle">Secretaria de Saúde do Distrito Federal · Região Administrativa de Santa Maria</p>
+    </div>
+  </header>
+
+  <nav class="breadcrumb" aria-label="Localização na página">
+    <span onclick="window.location.href='index.html'" style="cursor:pointer;" data-i18n="home">Início</span>
+    <span class="sep" aria-hidden="true"> › </span>
+    <span class="current" aria-current="page" data-i18n="login_breadcrumb">Login Admin</span>
+  </nav>
+
+  <main class="content" id="main-content" tabindex="-1">
+    <div class="page active"
+         style="display:flex;align-items:center;justify-content:center;min-height:60vh;">
+
+      <div class="card" style="max-width:420px;width:100%;box-shadow:0 4px 20px rgba(0,0,0,0.2);"
+           role="region" aria-label="Formulário de acesso administrativo">
+
+        <div class="card-header" id="login-title" data-i18n="login_card_title">Acesso Administrativo</div>
+
+        <div class="card-body">
+
+          <div class="notice" role="note" style="margin-bottom:20px;">
+            <span aria-hidden="true">🔒</span>
+            <span data-i18n="login_notice">Área restrita. Acesso somente para administradores autorizados.</span>
+          </div>
+
+          <div id="login_erro"
+               role="alert"
+               aria-live="assertive"
+               style="display:none;margin-bottom:14px;padding:10px 14px;background:#fff0f0;border:1px solid #f5c6c6;border-radius:6px;font-size:13px;color:#c0392b;">
+          </div>
+
+          <form onsubmit="event.preventDefault(); fazerLogin();" aria-labelledby="login-title" novalidate>
+
+            <div class="form-group">
+              <label class="form-label" for="login_email">
+                <span data-i18n="label_email">E-mail</span>
+                <span class="req" aria-label="obrigatório">*</span>
+              </label>
+              <div style="position:relative;">
+                <input class="form-control" type="email" id="login_email"
+                       autocomplete="email"
+                       aria-required="true"
+                       aria-describedby="login_erro"
+                       data-i18n-ph="label_email"
+                       placeholder="seu@email.gov.br"
+                       style="padding-right:36px;">
+                <i class='bx bx-user' aria-hidden="true"
+                   style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:18px;color:var(--text-muted);pointer-events:none;"></i>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-top:14px;">
+              <label class="form-label" for="login_senha">
+                <span data-i18n="label_senha">Senha</span>
+                <span class="req" aria-label="obrigatório">*</span>
+              </label>
+              <div style="position:relative;">
+                <input class="form-control" type="password" id="login_senha"
+                       autocomplete="current-password"
+                       aria-required="true"
+                       aria-describedby="login_erro"
+                       data-i18n-ph="senha_placeholder"
+                       placeholder="••••••••"
+                       style="padding-right:36px;">
+                <i class='bx bx-lock-alt' aria-hidden="true"
+                   style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:18px;color:var(--text-muted);pointer-events:none;"></i>
+              </div>
+            </div>
+
+            <div class="btn-row" style="margin-top:24px;justify-content:flex-end;">
+              <button type="button" class="btn btn-secondary"
+                      onclick="window.location.href='index.html'"
+                      data-i18n="btn_cancel">
+                Cancelar
+              </button>
+              <button type="submit" class="btn btn-primary" data-i18n="btn_enter">
+                Entrar
+              </button>
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="footer" role="contentinfo" tabindex="-1">
+    <strong data-i18n="footer_title">Secretaria de Saúde do Distrito Federal</strong>
+    <span data-i18n="footer_text">· Sistema de Agendamento de Consultas UBS</span><br>
+    <span data-i18n="footer_contact">Central de Atendimento: <strong>156</strong> · Ouvidoria: <strong>0800-644-0156</strong></span><br>
+    <small data-i18n="footer_rights">© 2026 GDF — Todos os direitos reservados</small>
+  </footer>
+
+</div>
+
+<script src="js/translations.js"></script>
+<script src="js/accessibility.js"></script>
+<script type="module" src="js/loginadmin.js"></script>
+</body>
+</html>
